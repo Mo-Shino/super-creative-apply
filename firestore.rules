@@ -1,0 +1,43 @@
+rules_version = '2';
+
+// أي زائر يقدر "يضيف" طلب تقديم فقط — ومحدش يقدر يقرا أو يعدّل أو يمسح من برّه.
+// الطلبات بتتشاف من Firebase Console (أو بحساب الأدمن).
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /registrations/{id} {
+      allow create: if
+        request.resource.data.keys().hasOnly(
+          ['fullName', 'phone', 'school', 'grade', 'talent', 'consent', 'createdAt']) &&
+        request.resource.data.keys().hasAll(
+          ['fullName', 'phone', 'school', 'grade', 'talent', 'consent', 'createdAt']) &&
+        request.resource.data.fullName is string &&
+        request.resource.data.fullName.size() >= 3 &&
+        request.resource.data.fullName.size() <= 100 &&
+        request.resource.data.phone is string &&
+        request.resource.data.phone.matches('^01[0125][0-9]{8}$') &&
+        request.resource.data.school is string &&
+        request.resource.data.school.size() >= 2 &&
+        request.resource.data.school.size() <= 100 &&
+        request.resource.data.grade is string &&
+        request.resource.data.grade.size() >= 1 &&
+        request.resource.data.grade.size() <= 30 &&
+        request.resource.data.talent in [
+          'فن بصري وتصميم',
+          'وسائط رقمية',
+          'التصوير',
+          'الأداء والصوت',
+          'أعمال يدوية وتطبيقية'
+        ] &&
+        request.resource.data.consent == true &&
+        request.resource.data.createdAt == request.time;
+
+      allow read, update, delete: if false;
+    }
+
+    // أي مسار تاني: ممنوع
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
