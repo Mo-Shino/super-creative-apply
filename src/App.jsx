@@ -27,8 +27,8 @@ export default function App() {
       </section>
 
       <section className="formSection" id="apply" aria-label="استمارة التقديم">
-        <img className="doodle doodle--right" src="/images/doodle.svg" alt="" aria-hidden="true" />
-        <img className="doodle doodle--left" src="/images/doodle.svg" alt="" aria-hidden="true" />
+        <img className="ribbon ribbon--a" src="/images/ribbon.svg" alt="" aria-hidden="true" width="2877" height="1923" />
+        <img className="ribbon ribbon--b" src="/images/ribbon.svg" alt="" aria-hidden="true" width="2877" height="1923" />
         <ApplyForm />
       </section>
 

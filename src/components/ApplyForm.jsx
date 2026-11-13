@@ -173,7 +173,7 @@ export default function ApplyForm() {
 
   return (
     <div className="card" ref={cardRef} style={lockedHeight ? { minHeight: lockedHeight } : undefined}>
-      <img className="card__pin" src="/images/pin.webp" alt="" aria-hidden="true" width="237" height="268" />
+      <img className="card__pin" src="/images/pin.webp" alt="" aria-hidden="true" width="420" height="502" />
       <div className="card__dots" aria-hidden="true">
         {DOTS.map((d) => (
           <i key={d} />

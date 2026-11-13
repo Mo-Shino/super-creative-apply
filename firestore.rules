@@ -1,9 +1,16 @@
 rules_version = '2';
 
-// أي زائر يقدر "يضيف" طلب تقديم فقط — ومحدش يقدر يقرا أو يعدّل أو يمسح من برّه.
-// الطلبات بتتشاف من Firebase Console (أو بحساب الأدمن).
+// - أي زائر يقدر "يضيف" طلب تقديم فقط (بعد التحقق من الحقول).
+// - القراءة والحذف للأدمن بس (حساب Firebase Authentication بإيميل الأدمن).
+// - مفيش تعديل لأي حد.
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // لازم يكون نفس الإيميل المستخدم في صفحة /admin (VITE_ADMIN_EMAIL)
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == 'admin@super-creative.app';
+    }
 
     match /registrations/{id} {
       allow create: if
@@ -32,7 +39,8 @@ service cloud.firestore {
         request.resource.data.consent == true &&
         request.resource.data.createdAt == request.time;
 
-      allow read, update, delete: if false;
+      allow read, delete: if isAdmin();
+      allow update: if false;
     }
 
     // أي مسار تاني: ممنوع

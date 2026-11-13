@@ -197,31 +197,35 @@
 
 /* ============ سيكشن الفورم ============ */
 .formSection {
+  /* الريبون الأخضر كامل (من غير قص): الأول فوق الكارد والتاني تحته */
+  --rib-w: min(66cqw, 980px);
   position: relative;
   display: flex;
   justify-content: center;
-  padding: clamp(70px, 13cqw, 200px) clamp(14px, 4cqw, 60px) clamp(50px, 8cqw, 120px);
+  /* ارتفاع الريبون ≈ 0.67 × عرضه: 75% منه فوق/تحت الكارد و25% ورا الكارد */
+  padding: calc(var(--rib-w) * 0.5) clamp(14px, 4cqw, 60px) calc(var(--rib-w) * 0.5);
   scroll-margin-top: 12px;
 }
 
-.doodle {
+.ribbon {
   position: absolute;
   z-index: 0;
-  width: 24cqw;
+  width: var(--rib-w);
+  height: auto;
   max-width: none;
   pointer-events: none;
   user-select: none;
 }
 
-.doodle--right {
-  right: 0;
-  top: 2cqw;
+.ribbon--a {
+  top: 0;
+  right: 6cqw;
 }
 
-.doodle--left {
-  left: 0;
+.ribbon--b {
   bottom: 0;
-  transform: scaleX(-1) rotate(8deg);
+  left: 6cqw;
+  transform: scale(-1, -1); /* مقلوب عشان يبقى شكل مختلف ومتوازن */
 }
 
 /* ============ الكارد ============ */
@@ -235,13 +239,16 @@
 }
 
 .card__pin {
+  --pin-w: clamp(58px, 11cqw, 96px);
   position: absolute;
   z-index: 3;
-  width: clamp(54px, 10cqw, 86px);
-  top: -6.5cqw;
-  left: 2.5cqw;
+  width: var(--pin-w);
+  height: auto;
+  /* الرأس فوق الكارد والإبرة غارزة جواه */
+  top: calc(var(--pin-w) * -0.92);
+  left: 2.2cqw;
   filter: drop-shadow(2px 4px 0 rgba(0, 0, 0, 0.22));
-  transform-origin: 55% 90%;
+  transform-origin: 85% 95%;
   animation: sway 5s ease-in-out infinite alternate;
   pointer-events: none;
 }
@@ -635,12 +642,16 @@
     font-size: 36cqw;
   }
 
-  .doodle {
-    width: 42cqw;
+  .formSection {
+    --rib-w: 98cqw;
   }
 
-  .doodle--right {
-    top: 0;
+  .ribbon--a {
+    right: 1cqw;
+  }
+
+  .ribbon--b {
+    left: 1cqw;
   }
 }
 

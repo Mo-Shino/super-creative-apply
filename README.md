@@ -33,6 +33,17 @@ npx vercel --prod
 ```
 (ضيف متغيرات البيئة من لوحة Vercel → Settings → Environment Variables قبل `--prod`.)
 
+## 4) صفحة الأدمن `/admin`
+لوحة مخفية (مفيش زر ليها). بتفتحها بإضافة `/admin` لآخر اللينك، وبتطلب **كلمة المرور بس**.
+فيها كل الطلبات (تحديث مباشر)، بحث وفلترة بالمجال، حذف بتأكيد، **تصدير Excel** (.xlsx منسّق) و**تصدير PDF** (تقرير بالهوية).
+
+إعدادها مرة واحدة في Firebase:
+1. **Build → Authentication → Get started → Sign-in method → Email/Password → Enable → Save**.
+2. **Authentication → Users → Add user**: الإيميل `admin@super-creative.app` (مجرد اسم مستخدم، مش لازم يكون إيميل حقيقي) والباسورد اللي تختاره.
+3. **Firestore → Rules**: الصق محتوى `firestore.rules` المحدّث → **Publish**.
+
+> لو غيّرت الإيميل، غيّره في 3 أماكن: المستخدم في Firebase، والسطر `isAdmin()` في `firestore.rules`، ومتغير `VITE_ADMIN_EMAIL` في Vercel.
+
 ## ملاحظات
 - مفاتيح `VITE_FIREBASE_*` بتبقى ظاهرة في المتصفح **بالتصميم** (دي مش أسرار). الحماية الفعلية هي `firestore.rules`.
 - الطلبات بتتشاف في **Firebase Console → Firestore → registrations**.

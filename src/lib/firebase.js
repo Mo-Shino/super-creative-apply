@@ -1,7 +1,7 @@
 // Firebase (Firestore Lite): نسخة خفيفة ومناسبة لفورم بيكتب بس.
 // الـ SDK بيتحمّل لحظة الإرسال بس (dynamic import) عشان الصفحة تفتح بسرعة.
 
-const config = {
+export const config = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
