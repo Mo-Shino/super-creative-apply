@@ -30,6 +30,12 @@ service cloud.firestore {
         request.resource.data.grade.size() >= 1 &&
         request.resource.data.grade.size() <= 30 &&
         request.resource.data.talent in [
+          'رسم',
+          'تصميم',
+          'غناء',
+          'تصوير',
+          'هاند ميد',
+          'تمثيل',
           'فن بصري وتصميم',
           'وسائط رقمية',
           'التصوير',

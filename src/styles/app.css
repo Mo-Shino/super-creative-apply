@@ -5,8 +5,7 @@
   width: 100%;
   min-height: 100vh;
   background: var(--purple);
-  overflow-x: hidden;
-  overflow-x: clip;
+  overflow: hidden;
 }
 
 /* ============ الهيرو: لوجو + العبارة + الزر، والكولاج جنبهم ============ */
@@ -211,37 +210,105 @@
   animation: spin 0.7s linear infinite;
 }
 
-/* ============ سيكشن الفورم ============ */
-.formSection {
-  /* الريبون الأخضر كامل (من غير قص): الأول فوق الكارد والتاني تحته */
-  --rib-w: min(54cqw, 780px);
-  position: relative;
-  display: flex;
-  justify-content: center;
-  /* ارتفاع الريبون ≈ 0.67 × عرضه: 75% منه فوق/تحت الكارد و25% ورا الكارد */
-  padding: calc(var(--rib-w) * 0.5) clamp(14px, 4cqw, 60px) calc(var(--rib-w) * 0.5);
-  scroll-margin-top: 12px;
-}
-
-.ribbon {
+/* ============ الدودل الأخضر المتعرج ============ */
+.doodle {
   position: absolute;
+  left: 0;
+  top: 196.9cqw;      /* y = 5100 على الـ mockup */
+  width: 100cqw;      /* بعرض الصفحة كلها بالظبط */
+  height: auto;       /* نسبة الـ SVG الأصلية محفوظة */
   z-index: 0;
-  width: var(--rib-w);
-  height: auto;
-  max-width: none;
   pointer-events: none;
   user-select: none;
 }
 
-.ribbon--a {
-  top: 0;
-  right: 6cqw;
+/* ============ سيكشن عنا ============ */
+.about {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 44.4cqw 44.4cqw;
+  justify-content: space-between;
+  align-items: center;
+  padding-inline: 5cqw 4cqw; /* RTL: start=يمين 5cqw, end=يسار 4cqw */
+  margin-top: 19.9cqw;
+  margin-bottom: 25.5cqw;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-.ribbon--b {
-  bottom: 0;
-  left: 6cqw;
-  transform: scale(-1, -1); /* مقلوب عشان يبقى شكل مختلف ومتوازن */
+.about__col {
+  min-width: 0;
+}
+
+.about__col--text {
+  width: 44.4cqw;
+}
+
+.about__col--image {
+  width: 44.4cqw;
+  overflow: visible;
+  display: flex;
+  justify-content: flex-end; /* في الـ RTL الاتجاه end هو جهة اليسار */
+}
+
+.about__title {
+  margin: 0 0 clamp(12px, 1.8cqw, 28px);
+  color: var(--white);
+  font-weight: 900;
+  font-size: clamp(34px, 7.3cqw, 190px);
+  line-height: 1.1;
+  text-align: right;
+}
+
+.about__desc {
+  width: 100%;
+  max-width: 44.4cqw;
+  color: var(--white);
+  font-size: clamp(16px, 2.4cqw, 62px);
+  line-height: 1.3;
+  text-align: right;
+  text-decoration: none;
+}
+
+.about__p {
+  margin: 0 0 clamp(10px, 1.5cqw, 24px);
+  color: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-decoration: none;
+}
+
+.about__p:last-child {
+  margin-bottom: 0;
+}
+
+.about__bold {
+  font-weight: 800;
+  color: inherit;
+}
+
+.about__img {
+  display: block;
+  width: calc(44.4cqw * 598 / 570);
+  height: auto;
+  max-width: none;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ============ سيكشن الفورم ============ */
+.formSection {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  padding: 0 clamp(14px, 4cqw, 60px) 10cqw;
+  scroll-margin-top: 12px;
 }
 
 /* ============ الكارد ============ */
@@ -670,16 +737,74 @@
     font-size: 17px;
   }
 
-  .formSection {
-    --rib-w: 98cqw;
+  .about {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding-inline: 4%;
+    margin-top: 12cqw;
+    margin-bottom: 16cqw;
   }
 
-  .ribbon--a {
-    right: 1cqw;
+  .about__col--text {
+    width: 100%;
   }
 
-  .ribbon--b {
-    left: 1cqw;
+  .about__col--image {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .about__desc {
+    max-width: 100%;
+  }
+
+  .about__img {
+    width: 92%;
+    margin-inline: auto;
+  }
+
+  .doodle {
+    width: 150cqw;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    top: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding-inline: 4%;
+    margin-top: 12cqw;
+    margin-bottom: 16cqw;
+  }
+
+  .about__col--text {
+    width: 100%;
+  }
+
+  .about__col--image {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .about__desc {
+    max-width: 100%;
+  }
+
+  .about__img {
+    width: 92%;
+    margin-inline: auto;
+  }
+
+  .doodle {
+    width: 150cqw;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    top: auto;
   }
 }
 

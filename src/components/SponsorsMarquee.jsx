@@ -3,6 +3,7 @@ const SPONSORS = [
   { src: '/images/sponsor-fathallah.webp', alt: 'فتح الله', w: 420, h: 379, size: 'square' },
   { src: '/images/sponsor-iats.webp', alt: 'المدارس الدولية للتكنولوجيا التطبيقية iATS', w: 420, h: 422, size: 'square' },
   { src: '/images/sponsor-tech.webp', alt: 'وزارة التربية والتعليم والتعليم الفني — التكنولوجيا التطبيقية', w: 452, h: 167, size: 'wide' },
+  { src: '/images/sponsor-sufra.png', alt: 'sufra', w: 800, h: 197, size: 'wide' }
 ]
 
 // نكرر المجموعة 4 مرات، ونحرك الشريط -50% = مجموعتين، فاللفة بتبقى من غير فجوة
