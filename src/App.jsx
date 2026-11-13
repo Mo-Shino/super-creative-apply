@@ -1,7 +1,5 @@
 import Hero from './components/Hero.jsx'
-import Headline from './components/Headline.jsx'
 import SponsorsMarquee from './components/SponsorsMarquee.jsx'
-import PillButton from './components/PillButton.jsx'
 import ApplyForm from './components/ApplyForm.jsx'
 
 function goToForm() {
@@ -17,14 +15,8 @@ function goToForm() {
 export default function App() {
   return (
     <main className="page">
-      <Hero />
-      <Headline />
+      <Hero onApply={goToForm} />
       <SponsorsMarquee />
-
-      <section className="cta">
-        <p className="cta__tag">الموسم الأول &nbsp;•&nbsp; الجودة في التعليم</p>
-        <PillButton onClick={goToForm}>قــدم الأن</PillButton>
-      </section>
 
       <section className="formSection" id="apply" aria-label="استمارة التقديم">
         <img className="ribbon ribbon--a" src="/images/ribbon.svg" alt="" aria-hidden="true" width="2877" height="1923" />

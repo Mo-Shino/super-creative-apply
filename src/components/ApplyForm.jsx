@@ -318,7 +318,7 @@ export default function ApplyForm() {
                 </svg>
               </span>
               <span className="check__text">
-                أقرّ بأن بياناتي صحيحة، وبموافقة ولي أمري على مشاركتي (للمشاركين تحت 18 سنة).
+                أقرّ بأن بياناتي صحيحة، وبموافقة ولي أمري على مشاركتي.
               </span>
             </label>
             {errors.consent && (
