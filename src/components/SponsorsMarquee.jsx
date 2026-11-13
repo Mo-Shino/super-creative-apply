@@ -3,11 +3,12 @@ const SPONSORS = [
   { src: '/images/sponsor-fathallah.webp', alt: 'فتح الله', w: 420, h: 379, size: 'square' },
   { src: '/images/sponsor-iats.webp', alt: 'المدارس الدولية للتكنولوجيا التطبيقية iATS', w: 420, h: 422, size: 'square' },
   { src: '/images/sponsor-tech.webp', alt: 'وزارة التربية والتعليم والتعليم الفني — التكنولوجيا التطبيقية', w: 452, h: 167, size: 'wide' },
-  { src: '/images/sponsor-sufra.png', alt: 'sufra', w: 800, h: 197, size: 'wide' }
+  { src: '/images/sponsor-sufra.png', alt: 'sufra', w: 800, h: 197, size: 'wide', link: 'https://sufra.site' },
+  { src: '/images/sponsor-aicam.png', alt: 'aicam', w: 800, h: 197, size: 'wide' },
 ]
 
 // نكرر المجموعة 4 مرات، ونحرك الشريط -50% = مجموعتين، فاللفة بتبقى من غير فجوة
-const GROUPS = [0, 1, 2, 3]
+const GROUPS = [0, 1, 2, 3, 4]
 
 export default function SponsorsMarquee() {
   return (
@@ -15,8 +16,8 @@ export default function SponsorsMarquee() {
       <div className="marquee__track">
         {GROUPS.map((g) => (
           <ul className="marquee__group" key={g} aria-hidden={g > 0 ? 'true' : undefined}>
-            {SPONSORS.map((s) => (
-              <li className="marquee__item" key={s.src}>
+            {SPONSORS.map((s) => {
+              const img = (
                 <img
                   className={`marquee__img marquee__img--${s.size}`}
                   src={s.src}
@@ -26,8 +27,29 @@ export default function SponsorsMarquee() {
                   loading="eager"
                   draggable="false"
                 />
-              </li>
-            ))}
+              )
+
+              // لو ليه لينك، ودي أول مجموعة بس، حط الصورة جوة <a>
+              // صح - كل النسخ فيها لينك
+              const isClickable = !!s.link
+
+              return (
+                <li className="marquee__item" key={s.src}>
+                  {isClickable ? (
+                    <a
+                      href={s.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      tabIndex={g === 0 ? 0 : -1}
+                    >
+                      {img}
+                    </a>
+                  ) : (
+                    img
+                  )}
+                </li>
+              )
+            })}
           </ul>
         ))}
       </div>

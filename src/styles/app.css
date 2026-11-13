@@ -54,7 +54,8 @@
   font-weight: 900;
   font-size: clamp(46px, 7.4vw, 104px);
   line-height: 1.12;
-  padding-bottom: 0.14em; /* مساحة للهمزة تحت الألف */
+  padding-bottom: 0.14em;
+  /* مساحة للهمزة تحت الألف */
 }
 
 .hero__title span {
@@ -108,7 +109,15 @@
   align-items: center;
   animation: marquee 32s linear infinite;
   will-change: transform;
+
+  /* وقف الحركة لما تقف على الصورة نفسها بس، مش على الشريط الأبيض */
+
 }
+
+.marquee:has(.marquee__img:hover) .marquee__track {
+  animation-play-state: paused;
+}
+
 
 .marquee__group {
   display: flex;
@@ -214,9 +223,12 @@
 .doodle {
   position: absolute;
   left: 0;
-  top: 196.9cqw;      /* y = 5100 على الـ mockup */
-  width: 100cqw;      /* بعرض الصفحة كلها بالظبط */
-  height: auto;       /* نسبة الـ SVG الأصلية محفوظة */
+  top: 196.9cqw;
+  /* y = 5100 على الـ mockup */
+  width: 100cqw;
+  /* بعرض الصفحة كلها بالظبط */
+  height: auto;
+  /* نسبة الـ SVG الأصلية محفوظة */
   z-index: 0;
   pointer-events: none;
   user-select: none;
@@ -230,7 +242,8 @@
   grid-template-columns: 44.4cqw 44.4cqw;
   justify-content: space-between;
   align-items: center;
-  padding-inline: 5cqw 4cqw; /* RTL: start=يمين 5cqw, end=يسار 4cqw */
+  padding-inline: 5cqw 4cqw;
+  /* RTL: start=يمين 5cqw, end=يسار 4cqw */
   margin-top: 19.9cqw;
   margin-bottom: 25.5cqw;
   box-sizing: border-box;
@@ -249,7 +262,8 @@
   width: 44.4cqw;
   overflow: visible;
   display: flex;
-  justify-content: flex-end; /* في الـ RTL الاتجاه end هو جهة اليسار */
+  justify-content: flex-end;
+  /* في الـ RTL الاتجاه end هو جهة اليسار */
 }
 
 .about__title {
@@ -514,14 +528,14 @@
   background: #e7e7e7;
 }
 
-.chip input:checked + span {
+.chip input:checked+span {
   background: var(--lime);
   border-color: var(--black);
   box-shadow: 3px 3px 0 var(--black);
   transform: translate(-1px, -1px);
 }
 
-.chip input:focus-visible + span {
+.chip input:focus-visible+span {
   outline: 3px solid var(--black);
   outline-offset: 3px;
 }
@@ -566,16 +580,16 @@
     transform 0.15s;
 }
 
-.check input:checked + .check__box {
+.check input:checked+.check__box {
   background: var(--lime);
 }
 
-.check input:checked + .check__box svg {
+.check input:checked+.check__box svg {
   opacity: 1;
   transform: scale(1);
 }
 
-.check input:focus-visible + .check__box {
+.check input:focus-visible+.check__box {
   outline: 3px solid var(--black);
   outline-offset: 3px;
 }
@@ -825,6 +839,7 @@
   from {
     transform: translateY(0) rotate(0deg);
   }
+
   to {
     transform: translateY(-10px) rotate(0.8deg);
   }
@@ -834,6 +849,7 @@
   from {
     transform: rotate(-4deg);
   }
+
   to {
     transform: rotate(4deg);
   }
@@ -844,6 +860,7 @@
     opacity: 0;
     transform: scale(0.85) translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -855,6 +872,7 @@
     opacity: 0;
     transform: scale(0.4);
   }
+
   to {
     opacity: 1;
     transform: scale(1);
@@ -872,6 +890,7 @@
     opacity: 1;
     transform: translate(0, 0) rotate(0deg);
   }
+
   100% {
     opacity: 0;
     transform: translate(var(--drift), 520px) rotate(var(--rot));
@@ -879,6 +898,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .marquee__track,
   .hero__collage,
   .hero__logo,
