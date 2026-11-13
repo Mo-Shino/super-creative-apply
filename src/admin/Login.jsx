@@ -43,7 +43,8 @@ export default function Login() {
     setBusy(true)
     setError('')
     try {
-      await signInWithEmailAndPassword(auth, ADMIN_EMAIL, password)
+      // trim: كيبورد الموبايل العربي ساعات بيزوّد مسافة في الآخر
+      await signInWithEmailAndPassword(auth, ADMIN_EMAIL, password.trim())
       // onAuthStateChanged في الصفحة الأم هيفتح اللوحة
     } catch (err) {
       setError(errorMessage(err?.code))
