@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import PillButton from './PillButton.jsx'
+import FormCard from './common/FormCard.jsx'
+import Field from './common/Field.jsx'
 import { submitRegistration } from '../lib/firebase.js'
 import {
   TALENT_OPTIONS,
@@ -22,37 +24,6 @@ const EMPTY = {
 }
 
 const ORDER = ['fullName', 'phone', 'school', 'grade', 'talent', 'consent']
-const DOTS = Array.from({ length: 14 }, (_, i) => i)
-
-function Check() {
-  return (
-    <span className="field__ok" aria-hidden="true">
-      <svg viewBox="0 0 20 20" width="14" height="14">
-        <path d="M4.5 10.5l3.6 3.6L15.5 6.5" fill="none" stroke="#000" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    </span>
-  )
-}
-
-function Field({ id, label, hint, error, ok, children }) {
-  return (
-    <div className={`field ${error ? 'is-invalid' : ''}`}>
-      <label className="field__label" htmlFor={id}>
-        {label}
-        {hint && <span className="field__hint"> : {hint}</span>}
-      </label>
-      <div className="field__control">
-        {children}
-        {ok && <Check />}
-      </div>
-      {error && (
-        <p className="field__error" id={`${id}-err`} role="alert">
-          {error}
-        </p>
-      )}
-    </div>
-  )
-}
 
 function Confetti() {
   const pieces = useMemo(
@@ -172,14 +143,7 @@ export default function ApplyForm() {
   const busy = status === 'submitting'
 
   return (
-    <div className="card" ref={cardRef} style={lockedHeight ? { minHeight: lockedHeight } : undefined}>
-      <img className="card__pin" src="/images/pin.webp" alt="" aria-hidden="true" width="420" height="502" />
-      <div className="card__dots" aria-hidden="true">
-        {DOTS.map((d) => (
-          <i key={d} />
-        ))}
-      </div>
-
+    <FormCard cardRef={cardRef} lockedHeight={lockedHeight}>
       {status === 'success' ? (
         <div className="success" role="status" aria-live="polite">
           <Confetti />
@@ -361,6 +325,6 @@ export default function ApplyForm() {
           </div>
         </form>
       )}
-    </div>
+    </FormCard>
   )
 }
