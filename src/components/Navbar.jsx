@@ -65,13 +65,6 @@ export default function Navbar({ currentPath = '/', onNavigate }) {
               الرئيسية
             </a>
 
-            <a
-              href="/#workshops"
-              className="navbar__link navbar__link--workshops"
-              onClick={(e) => handleLinkClick(e, '/', '#workshops')}
-            >
-              الورش
-            </a>
           </div>
         </div>
 

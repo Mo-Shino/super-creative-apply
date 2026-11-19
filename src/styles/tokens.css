@@ -6,6 +6,7 @@
   --field: #f2f2f2; /* خلفية الحقول */
   --hint: #777777; /* النص الرمادي */
   --error: #d00000; /* للأخطاء بس */
+  --nav-h: clamp(56px, 4.2vw, 80px); /* ارتفاع النافبار الثابت */
 
   --font: 'Cairo Variable', 'Cairo', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
 }

@@ -22,7 +22,8 @@
     'copy collage';
   align-content: center;
   column-gap: clamp(20px, 5vw, 72px);
-  padding: clamp(28px, 4.5vw, 64px) clamp(18px, 4vw, 48px) clamp(44px, 6vw, 84px);
+  /* نبدأ تحت النافبار الثابت بمسافة، عشان أعلى اللوجو (التاج) ما يتقصش */
+  padding: calc(var(--nav-h) + clamp(18px, 3vw, 40px)) clamp(18px, 4vw, 48px) clamp(44px, 6vw, 84px);
 }
 
 .hero__logo {
@@ -326,7 +327,7 @@
   justify-content: center;
   /* padding من فوق: عشان رأس الدبوس (طالع فوق الكارد) ما يتقصش بـ overflow بتاع applyZone */
   padding: clamp(70px, 11cqw, 110px) clamp(14px, 4cqw, 60px) 10cqw;
-  scroll-margin-top: 12px;
+  scroll-margin-top: calc(var(--nav-h) + 12px);
 }
 
 /* ============ الكارد ============ */
@@ -735,7 +736,7 @@
     row-gap: 10px;
     justify-items: center;
     text-align: center;
-    padding-top: 28px;
+    padding-top: calc(var(--nav-h) + 18px);
     padding-bottom: 40px;
   }
 
@@ -933,7 +934,7 @@
   top: 0;
   inset-inline: 0;
   z-index: 50;
-  height: clamp(56px, 4.2vw, 80px);
+  height: var(--nav-h);
   background: var(--purple);
   transition: border-bottom-color 0.15s ease, box-shadow 0.15s ease;
 }
@@ -1227,7 +1228,7 @@
   background: var(--purple);
   overflow-x: hidden;
   overflow-x: clip;
-  padding-top: calc(clamp(56px, 4.2vw, 80px) + clamp(24px, 6cqw, 64px));
+  padding-top: calc(var(--nav-h) + clamp(24px, 6cqw, 64px));
 }
 
 .submission-hero {
