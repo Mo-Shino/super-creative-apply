@@ -105,7 +105,13 @@ export default function Dashboard() {
     return () => clearTimeout(t)
   }, [toast])
 
-  const counts = useMemo(() => countByTalent(rows, TALENT_OPTIONS), [rows])
+  // المجالات الحالية + أي مجال قديم لسه موجود في الطلبات القديمة (عشان ما يختفيش من الإحصائيات والتصدير)
+  const talents = useMemo(() => {
+    const extra = [...new Set(rows.map((r) => r.talent))].filter((t) => t && !TALENT_OPTIONS.includes(t))
+    return [...TALENT_OPTIONS, ...extra]
+  }, [rows])
+
+  const counts = useMemo(() => countByTalent(rows, talents), [rows, talents])
 
   const filtered = useMemo(() => {
     const q = norm(search)
@@ -138,7 +144,7 @@ export default function Dashboard() {
     if (!filtered.length || exporting) return
     setExporting(true)
     try {
-      await exportExcel(filtered, TALENT_OPTIONS)
+      await exportExcel(filtered, talents)
     } catch {
       setToast('فشل تصدير Excel. حاول تاني.')
     } finally {
@@ -223,7 +229,7 @@ export default function Dashboard() {
                       <span className="adm-stat__n">{rows.length}</span>
                       <span className="adm-stat__l">الإجمالي</span>
                     </button>
-                    {TALENT_OPTIONS.map((t) => (
+                    {talents.map((t) => (
                       <button
                         key={t}
                         className={`adm-stat ${talent === t ? 'is-on' : ''}`}
@@ -339,9 +345,9 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="adm-print__stats">
-          {TALENT_OPTIONS.map((t) => (
+          {talents.map((t) => (
             <span key={t}>
-              {t} <b>{countByTalent(filtered, TALENT_OPTIONS)[t]}</b>
+              {t} <b>{countByTalent(filtered, talents)[t]}</b>
             </span>
           ))}
         </div>

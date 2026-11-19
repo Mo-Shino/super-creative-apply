@@ -44,6 +44,14 @@ npx vercel --prod
 
 > لو غيّرت الإيميل، غيّره في 3 أماكن: المستخدم في Firebase، والسطر `isAdmin()` في `firestore.rules`، ومتغير `VITE_ADMIN_EMAIL` في Vercel.
 
+## 5) البيانات في Firestore
+| المجموعة | بتتملي من | بتتشاف في |
+|---|---|---|
+| `registrations` | فورم التقديم (الصفحة الرئيسية) | `/admin` ← تبويب «طلبات التقديم» |
+| `submissions` | صفحة تسليم الأعمال `/submission` | `/admin` ← تبويب «التسليمات» |
+
+أي تعديل في `firestore.rules` لازم يتنشر في Firebase ← Firestore ← Rules ← **Publish** عشان يشتغل.
+
 ## ملاحظات
 - مفاتيح `VITE_FIREBASE_*` بتبقى ظاهرة في المتصفح **بالتصميم** (دي مش أسرار). الحماية الفعلية هي `firestore.rules`.
 - الطلبات بتتشاف في **Firebase Console → Firestore → registrations**.
