@@ -3,9 +3,9 @@
 import { getApp, getApps, initializeApp } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
-import { config, isFirebaseConfigured, COLLECTION } from '../lib/firebase.js'
+import { config, isFirebaseConfigured, COLLECTION, SUBMISSIONS_COLLECTION } from '../lib/firebase.js'
 
-export { isFirebaseConfigured, COLLECTION }
+export { isFirebaseConfigured, COLLECTION, SUBMISSIONS_COLLECTION }
 
 // إيميل الأدمن: مجرد "اسم مستخدم" ثابت. الباسورد بس هو اللي بتكتبه في الصفحة.
 // لازم يكون هو نفس الإيميل اللي هتعمل بيه المستخدم في Firebase Authentication

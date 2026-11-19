@@ -1,6 +1,6 @@
 rules_version = '2';
 
-// - أي زائر يقدر "يضيف" طلب تقديم فقط (بعد التحقق من الحقول).
+// - أي زائر يقدر "يضيف" طلب تقديم أو تسليم عمل فقط (بعد التحقق من الحقول).
 // - القراءة والحذف للأدمن بس (حساب Firebase Authentication بإيميل الأدمن).
 // - مفيش تعديل لأي حد.
 service cloud.firestore {
@@ -44,6 +44,34 @@ service cloud.firestore {
         ] &&
         request.resource.data.consent == true &&
         request.resource.data.createdAt == request.time;
+
+      allow read, delete: if isAdmin();
+      allow update: if false;
+    }
+
+    // تسليم الأعمال (صفحة /submission): إضافة للجميع بعد التحقق، قراءة/حذف للأدمن بس
+    match /submissions/{id} {
+      allow create: if
+        request.resource.data.keys().hasOnly(
+          ['student_name', 'category', 'participation_type', 'work_title', 'idea', 'work_link', 'created_at']) &&
+        request.resource.data.keys().hasAll(
+          ['student_name', 'category', 'participation_type', 'work_title', 'idea', 'work_link', 'created_at']) &&
+        request.resource.data.student_name is string &&
+        request.resource.data.student_name.size() >= 3 &&
+        request.resource.data.student_name.size() <= 100 &&
+        request.resource.data.category in ['drawing', 'design', 'acting', 'singing', 'handmade'] &&
+        request.resource.data.participation_type in ['team', 'individual'] &&
+        request.resource.data.work_title is string &&
+        request.resource.data.work_title.size() >= 2 &&
+        request.resource.data.work_title.size() <= 100 &&
+        request.resource.data.idea is string &&
+        request.resource.data.idea.size() >= 20 &&
+        request.resource.data.idea.size() <= 1000 &&
+        request.resource.data.work_link is string &&
+        request.resource.data.work_link.size() <= 500 &&
+        request.resource.data.work_link.matches(
+          '^https://(drive[.]google[.]com|docs[.]google[.]com|(www[.])?youtube[.]com|youtu[.]be)/.+') &&
+        request.resource.data.created_at == request.time;
 
       allow read, delete: if isAdmin();
       allow update: if false;

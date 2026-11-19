@@ -4,13 +4,11 @@ import Field from '../components/common/Field.jsx'
 import CustomRadio from '../components/common/CustomRadio.jsx'
 import PillButton from '../components/PillButton.jsx'
 import {
-  CATEGORY_LABELS,
-  PARTICIPATION_LABELS,
   isSubmissionRateLimited,
   recordWorkSubmission,
   submitWorkSubmission,
   validateSubmission,
-} from '../lib/supabase.js'
+} from '../lib/submissions.js'
 
 const CATEGORY_OPTIONS = [
   { value: 'drawing', label: 'رسم' },
@@ -160,10 +158,10 @@ export default function SubmissionPage() {
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
       setStatus('idle')
-      if (err?.code === 'supabase/not-configured') {
-        setSubmitError('الموقع لسه مش متوصّل بقاعدة البيانات (Supabase). كلّم المسؤول.')
-      } else if (err?.message?.includes('violates check constraint') || err?.code === '23514') {
-        setSubmitError('البيانات غير صالحة وفق شروط قاعدة البيانات. راجع الحقول وحاول تاني.')
+      if (err?.code === 'app/not-configured') {
+        setSubmitError('الموقع لسه مش متوصّل بقاعدة البيانات. كلّم المسؤول.')
+      } else if (err?.code === 'permission-denied') {
+        setSubmitError('البيانات مش مقبولة. راجع الحقول (والرابط لازم يكون Google Drive أو YouTube) وحاول تاني.')
       } else {
         setSubmitError('حصلت مشكلة في الإرسال. اتأكد من الإنترنت وحاول تاني.')
       }

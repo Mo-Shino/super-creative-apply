@@ -13,6 +13,7 @@ export const config = {
 export const isFirebaseConfigured = Boolean(config.apiKey && config.projectId && config.appId)
 
 export const COLLECTION = 'registrations'
+export const SUBMISSIONS_COLLECTION = 'submissions'
 
 let dbPromise = null
 
@@ -29,8 +30,8 @@ function getDb() {
   return dbPromise
 }
 
-/** يحفظ طلب تقديم جديد. بيرمي Error بـ code واضح لو فشل. */
-export async function submitRegistration(data) {
+/** يضيف مستند في مجموعة (collection) مع وقت الإضافة. بيرمي Error بـ code واضح لو فشل. */
+export async function addToCollection(name, data, timeField = 'createdAt') {
   if (!isFirebaseConfigured) {
     const err = new Error('firebase-not-configured')
     err.code = 'app/not-configured'
@@ -38,5 +39,10 @@ export async function submitRegistration(data) {
   }
   const db = await getDb()
   const { collection, addDoc, serverTimestamp } = await import('firebase/firestore/lite')
-  await addDoc(collection(db, COLLECTION), { ...data, createdAt: serverTimestamp() })
+  await addDoc(collection(db, name), { ...data, [timeField]: serverTimestamp() })
+}
+
+/** يحفظ طلب تقديم جديد. */
+export function submitRegistration(data) {
+  return addToCollection(COLLECTION, data, 'createdAt')
 }

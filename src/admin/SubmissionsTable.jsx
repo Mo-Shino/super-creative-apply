@@ -1,11 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
-import {
-  CATEGORY_LABELS,
-  PARTICIPATION_LABELS,
-  deleteSubmission,
-  getSubmissions,
-  isSupabaseConfigured,
-} from '../lib/supabase.js'
+import { collection, deleteDoc, doc, onSnapshot, orderBy, query } from 'firebase/firestore'
+import { CATEGORY_LABELS, PARTICIPATION_LABELS } from '../lib/submissions.js'
+import { SUBMISSIONS_COLLECTION, db } from './adminFirebase.js'
 
 const PAGE_SIZE = 50
 
@@ -141,26 +137,30 @@ export default function SubmissionsTable() {
   const [deleting, setDeleting] = useState(false)
   const [toast, setToast] = useState('')
 
-  const fetchRows = async () => {
-    setLoading(true)
-    setError('')
-    try {
-      const data = await getSubmissions()
-      const total = data.length
-      setRows(data.map((r, i) => ({ ...r, no: total - i })))
-    } catch (err) {
-      if (err?.code === 'PGRST301' || err?.message?.includes('permission')) {
-        setError('الصلاحيات في Supabase مش متفعّلة لقراءة التسليمات. اتأكد من تشغيل سياسات RLS.')
-      } else {
-        setError('حصلت مشكلة في تحميل التسليمات من Supabase. اتأكد من ضبط VITE_SUPABASE_URL و VITE_SUPABASE_ANON_KEY.')
-      }
-    } finally {
-      setLoading(false)
-    }
-  }
-
+  // تحديث مباشر: أي تسليم جديد بيظهر لوحده
   useEffect(() => {
-    fetchRows()
+    const q = query(collection(db, SUBMISSIONS_COLLECTION), orderBy('created_at', 'desc'))
+    return onSnapshot(
+      q,
+      (snap) => {
+        const list = snap.docs.map((d) => {
+          const data = d.data({ serverTimestamps: 'estimate' })
+          return { id: d.id, ...data, created_at: data.created_at?.toMillis?.() ?? 0 }
+        })
+        const total = list.length
+        setRows(list.map((r, i) => ({ ...r, no: total - i })))
+        setLoading(false)
+        setError('')
+      },
+      (err) => {
+        setLoading(false)
+        setError(
+          err?.code === 'permission-denied'
+            ? 'الصلاحيات لسه مش متفعّلة لقراءة التسليمات. انسخ ملف firestore.rules الجديد والصقه في Firebase ← Firestore ← Rules ثم اضغط Publish.'
+            : 'حصلت مشكلة في تحميل التسليمات. اتأكد من الإنترنت وحدّث الصفحة.',
+        )
+      },
+    )
   }, [])
 
   useEffect(() => {
@@ -198,9 +198,8 @@ export default function SubmissionsTable() {
     if (!toDelete) return
     setDeleting(true)
     try {
-      await deleteSubmission(toDelete.id)
+      await deleteDoc(doc(db, SUBMISSIONS_COLLECTION, toDelete.id))
       setToast('تم حذف التسليم بنجاح')
-      setRows((prev) => prev.filter((r) => r.id !== toDelete.id))
       setToDelete(null)
     } catch {
       setToast('فشل حذف التسليم. حاول تاني.')
@@ -218,7 +217,7 @@ export default function SubmissionsTable() {
           <h2 className="adm-card__subtitle">تسليمات الأعمال الفنية</h2>
           <p className="adm-muted">
             {loading
-              ? 'جارٍ التحميل من Supabase...'
+              ? 'جارٍ التحميل...'
               : hasFilter
               ? `${filtered.length} نتيجة من ${rows.length} تسليم`
               : `${rows.length} تسليم`}
@@ -235,18 +234,8 @@ export default function SubmissionsTable() {
             </svg>
             تصدير CSV
           </button>
-          <button className="adm-btn adm-btn--ghost" onClick={fetchRows} title="تحديث البيانات">
-            تحديث
-          </button>
         </div>
       </div>
-
-      {!isSupabaseConfigured && (
-        <div className="adm-alert" role="alert">
-          <strong>قاعدة بيانات Supabase لسه مش مضبوطة.</strong> يرجى ضبط{' '}
-          <code>VITE_SUPABASE_URL</code> و <code>VITE_SUPABASE_ANON_KEY</code> في ملف <code>.env</code>.
-        </div>
-      )}
 
       {error ? (
         <div className="adm-alert" role="alert">

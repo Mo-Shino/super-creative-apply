@@ -1,20 +1,7 @@
-import { createClient } from '@supabase/supabase-js'
+// تسليم الأعمال: التحقق + الإرسال إلى Firebase Firestore (مجموعة submissions).
+import { SUBMISSIONS_COLLECTION, addToCollection } from './firebase.js'
 
-const env = typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env : (typeof process !== 'undefined' && process.env ? process.env : {})
-
-export const supabaseUrl = env.VITE_SUPABASE_URL || ''
-export const supabaseAnonKey = env.VITE_SUPABASE_ANON_KEY || ''
-
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
-
-export const supabase = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey, {
-      auth: {
-        persistSession: true,
-        autoRefreshToken: true,
-      },
-    })
-  : null
+export { SUBMISSIONS_COLLECTION }
 
 export const CATEGORY_LABELS = {
   drawing: 'رسم',
@@ -29,6 +16,7 @@ export const PARTICIPATION_LABELS = {
   individual: 'فردي',
 }
 
+/* حماية بسيطة من الإرسال المتكرر: 3 تسليمات كل 10 دقايق من نفس المتصفح */
 export const SUBMISSION_RATE_LIMIT_KEY = 'sc_submissions_timestamps'
 
 export function isSubmissionRateLimited(maxSubmits = 3, windowMs = 10 * 60 * 1000) {
@@ -51,10 +39,11 @@ export function recordWorkSubmission(windowMs = 10 * 60 * 1000) {
     list.push(now)
     localStorage.setItem(SUBMISSION_RATE_LIMIT_KEY, JSON.stringify(list))
   } catch {
-    // ignore local storage errors
+    // التخزين مش متاح — مش مشكلة
   }
 }
 
+// لازم تفضل مطابقة للقاعدة اللي في firestore.rules
 export const WORK_LINK_REGEX = /^https:\/\/(drive\.google\.com|docs\.google\.com|(www\.)?youtube\.com|youtu\.be)\/.+/i
 
 export function validateSubmission(values) {
@@ -111,56 +100,18 @@ export function validateSubmission(values) {
   return errors
 }
 
-export async function submitWorkSubmission(payload) {
-  if (!isSupabaseConfigured || !supabase) {
-    const err = new Error('supabase-not-configured')
-    err.code = 'supabase/not-configured'
-    throw err
-  }
-
-  const cleaned = {
-    student_name: payload.student_name.trim(),
-    category: payload.category,
-    participation_type: payload.participation_type,
-    work_title: payload.work_title.trim(),
-    idea: payload.idea.trim(),
-    work_link: payload.work_link.trim(),
-  }
-
-  const { data, error } = await supabase.from('submissions').insert([cleaned]).select()
-
-  if (error) {
-    throw error
-  }
-
-  return data
-}
-
-export async function getSubmissions() {
-  if (!isSupabaseConfigured || !supabase) {
-    return []
-  }
-
-  const { data, error } = await supabase
-    .from('submissions')
-    .select('*')
-    .order('created_at', { ascending: false })
-
-  if (error) {
-    throw error
-  }
-
-  return data || []
-}
-
-export async function deleteSubmission(id) {
-  if (!isSupabaseConfigured || !supabase) {
-    const err = new Error('supabase-not-configured')
-    throw err
-  }
-
-  const { error } = await supabase.from('submissions').delete().eq('id', id)
-  if (error) {
-    throw error
-  }
+/** يحفظ تسليم عمل جديد في Firestore. */
+export function submitWorkSubmission(payload) {
+  return addToCollection(
+    SUBMISSIONS_COLLECTION,
+    {
+      student_name: payload.student_name.trim(),
+      category: payload.category,
+      participation_type: payload.participation_type,
+      work_title: payload.work_title.trim(),
+      idea: payload.idea.trim(),
+      work_link: payload.work_link.trim(),
+    },
+    'created_at',
+  )
 }
